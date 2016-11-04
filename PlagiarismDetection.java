@@ -9,10 +9,10 @@ import java.util.*;
  * home assignment by TripAdvisor
  * DFS of the level.
  */
-public class PlagiarismDetection {
+public class PlagiarismDetection<T> {
     private int N;
     private HashSet<String> src;
-    private HashMap<String, List<Integer>> synos;
+    private Map<String, List<Integer>> synos;
     private HashMap<Integer, Set<String>> reverseSynos;
 
     List<String[]> sourceByN;
@@ -50,45 +50,13 @@ public class PlagiarismDetection {
             throw new IllegalArgumentException("N should be positive");
         }
         this.N = N;
-        synos  = buildSynonyms(synonyms);
+        synos  = getSynonyms(new Synonyms(synonyms));
     }
 
 
 
-    public HashMap<String, List<Integer>> buildSynonyms(String syn) {
-        if (syn == null || syn.length() == 0) {
-            System.err.println("Synonyms Input Error");
-            throw new IllegalArgumentException("Invalid Synonyms Input");
-        }
-        // union find like structure.
-        HashMap<String, List<Integer>> syno = new HashMap<>();
-        try {
-            BufferedReader synof = new BufferedReader(new FileReader(syn));
-            // fist line is always comment. So omit the fist line.
-            String line;
-            int uniqueId = 0;
-            while ((line = synof.readLine()) != null) {
-                String[] wd = line.split("\\s");
-                // find a deputy for this group
-                for (String w : wd) {
-                    List<Integer> lst = syno.get(w);
-                    if (lst == null) {
-                        lst = new ArrayList<>();
-                        syno.put(w, lst);
-                    }
-                    lst.add(uniqueId);
-                }
-                uniqueId++;
-            }
-        } catch (FileNotFoundException e) {
-            System.err.println("synonyms file not found");
-            System.exit(2);
-        } catch (IOException io) {
-            System.err.println("synonyms file IO exception");
-            System.exit(2);
-        }
-
-        return syno;
+    public Map<String, List<Integer>> getSynonyms(Synonyms syno) {
+        return syno.getSynonyms();
     }
 
     private String[] buildSourceByN(String source) {
