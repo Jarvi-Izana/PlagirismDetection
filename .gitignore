@@ -1,0 +1,9 @@
+*.class
+.project
+.classpath
+.idea
+/out/*
+*.iml
+transcript.txt
+*~
+.DS_Store
