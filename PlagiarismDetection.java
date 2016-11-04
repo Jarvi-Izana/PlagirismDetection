@@ -15,6 +15,7 @@ public class PlagiarismDetection<E extends Comparable<E>> {
     private int N;
     private HashSet<String> src;
     private Map<E, List<Integer>> synos;
+    private Map<Integer, List<E>> isynos;
     private Map<E, List<Integer>> fastAccess;
 
     List<String[]> sourceByN;
@@ -55,6 +56,7 @@ public class PlagiarismDetection<E extends Comparable<E>> {
 
         this.N = N;
         synos  = getSynonyms(synonyms);
+        isynos = getInversedSyno(synonyms);
         fastAccess = fastAccess(source);
     }
 
@@ -63,6 +65,7 @@ public class PlagiarismDetection<E extends Comparable<E>> {
         return syno.getSynonyms();
     }
 
+    public Map<Integer, List<E>> getInversedSyno(Synonymsor<E, Integer> syno) { return syno.getInversedSyno(); }
     /**
      * DFS or Permutation
      * @param idx
@@ -71,15 +74,15 @@ public class PlagiarismDetection<E extends Comparable<E>> {
      * @return
      *  true, if the pattern of N words in source can be matched with target, otherwise false
      */
-    public boolean detection(String[] source, String[] target, int idx, int N) {
+    public boolean detection(Indexable<E> source, Indexable<E> target, int idx, int N) {
         if (N == 0)
             return true;
 
-        List<Integer> syno_src = synos.get(source[idx]);
-        List<Integer> syno_tar = synos.get(target[idx]);
+        List<Integer> syno_src = synos.get(source.get(idx));
+        List<Integer> syno_tar = synos.get(target.get(idx));
 
         if (syno_src == null) {
-            return syno_tar == null && (source[idx].equals(target[idx])) && detection(source, target, idx + 1, N - 1);
+            return syno_tar == null && (source.get(idx).equals(target.get(idx))) && detection(source, target, idx + 1, N - 1);
         } else {
             if (syno_tar == null)
                 return false;

@@ -16,7 +16,6 @@ public final class Test {
         Text src = new Text("source.txt");
         Text tar = new Text("target.txt");
         PlagiarismDetection<String> pd = new PlagiarismDetection<>(syno, src, tar);
-
         synonyms_test(syno, pd);
         text_test(new Text());
     }
@@ -33,6 +32,17 @@ public final class Test {
         for (Map.Entry<String, List<Integer>> et : syno.entrySet()) {
             System.out.println(et.toString());
         }
+
+
+        Map<Integer, List<String>> isyno = pd.getInversedSyno(in);
+
+        assert isyno.get(1).get(0).equals("jaeger");
+        assert isyno.get(2).get(0).equals("jaeger");
+        assert isyno.get(0).get(2).equals("jog");
+
+        for (Map.Entry<Integer, List<String>> et : isyno.entrySet()) {
+            System.out.println(et.toString());
+        }
     }
 
     private static void text_test(@NotNull Text txt) {
@@ -43,7 +53,4 @@ public final class Test {
             System.out.println(w);
         }
     }
-
-
-
 }
