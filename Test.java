@@ -16,8 +16,12 @@ public final class Test {
         Text src = new Text("source.txt");
         Text tar = new Text("target.txt");
         PlagiarismDetection<String> pd = new PlagiarismDetection<>(syno, src, tar);
-//        synonyms_test(syno, pd);
-//        text_test(src);
+
+        synonyms_test(syno, pd);
+        System.out.println();
+
+        text_test(src);
+        System.out.println();
 
         detection_test(pd, src, tar);
     }
@@ -56,6 +60,6 @@ public final class Test {
     }
 
     private static void detection_test(@NotNull PlagiarismDetection<String> pd, Indexable<String> source, Indexable<String> target) {
-        System.out.println(pd.detection(source, target));
+        System.out.println(pd.detection(source, target, true));
     }
 }
