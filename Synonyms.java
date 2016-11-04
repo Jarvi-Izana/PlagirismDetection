@@ -9,7 +9,7 @@ import java.util.*;
  * object that provides synonyms
  * (obj1, obj2, ... ) -> Unique Id
  */
-public class Synonyms implements Synonymsor<String, Integer>  {
+public class Synonyms implements Synonymsor<String, Integer> {
     private String synName;
     private Map<String, List<Integer>> synonyms;
     private Map<Integer, List<String>> inversedSyno;
@@ -35,14 +35,17 @@ public class Synonyms implements Synonymsor<String, Integer>  {
         return synonyms;
     }
 
-    public Map<Integer, List<String>> getInversedSyno() {return inversedSyno;}
+    public Map<Integer, List<String>> getInversedSyno() {
+        return inversedSyno;
+    }
+
     public void buildSynonyms() {
         if (synName == null || synName.length() == 0) {
             System.err.println("Synonyms Input Error");
             throw new IllegalArgumentException("Invalid Synonyms Input");
         }
         // union find like structure.
-        HashMap<String, List<Integer>> syno  = new HashMap<>();
+        HashMap<String, List<Integer>> syno = new HashMap<>();
         HashMap<Integer, List<String>> isyno = new HashMap<>();
         try {
             BufferedReader synof = new BufferedReader(new FileReader(synName));

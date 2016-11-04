@@ -2,7 +2,8 @@ import java.util.Iterator;
 
 /**
  * Created by GuihaoLiang on 11/3/16.
- * the interface
+ * the interface for an abstract file that can be serializable and indexed
+ * by index, similar to ArrayList.
  */
 
 public interface Indexable<E extends Comparable<E>> {

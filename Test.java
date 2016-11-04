@@ -16,8 +16,10 @@ public final class Test {
         Text src = new Text("source.txt");
         Text tar = new Text("target.txt");
         PlagiarismDetection<String> pd = new PlagiarismDetection<>(syno, src, tar);
-        synonyms_test(syno, pd);
-        text_test(new Text());
+//        synonyms_test(syno, pd);
+//        text_test(src);
+
+        detection_test(pd, src, tar);
     }
 
     private static void synonyms_test(@NotNull Synonyms in, @NotNull PlagiarismDetection<String> pd) {
@@ -46,11 +48,14 @@ public final class Test {
     }
 
     private static void text_test(@NotNull Text txt) {
-        assert txt.get(0).equals("went");
         assert txt.get(2).equals("a");
 
         for (String w : txt) {
             System.out.println(w);
         }
+    }
+
+    private static void detection_test(@NotNull PlagiarismDetection<String> pd, Indexable<String> source, Indexable<String> target) {
+        System.out.println(pd.detection(source, target));
     }
 }

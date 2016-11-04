@@ -68,21 +68,20 @@ public class PlagiarismDetection<E extends Comparable<E>> {
     public Map<Integer, List<E>> getInversedSyno(Synonymsor<E, Integer> syno) { return syno.getInversedSyno(); }
     /**
      * DFS or Permutation
-     * @param idx
      * @param N
      *  the window size
      * @return
      *  true, if the pattern of N words in source can be matched with target, otherwise false
      */
-    public boolean detection(Indexable<E> source, Indexable<E> target, int idx, int N) {
+    private boolean detection(Indexable<E> source, Indexable<E> target, int sidx, int tidx, int N) {
         if (N == 0)
             return true;
 
-        List<Integer> syno_src = synos.get(source.get(idx));
-        List<Integer> syno_tar = synos.get(target.get(idx));
+        List<Integer> syno_src = synos.get(source.get(sidx));
+        List<Integer> syno_tar = synos.get(target.get(tidx));
 
         if (syno_src == null) {
-            return syno_tar == null && (source.get(idx).equals(target.get(idx))) && detection(source, target, idx + 1, N - 1);
+            return syno_tar == null && (source.get(sidx).equals(target.get(tidx))) && detection(source, target, sidx + 1, tidx + 1, N - 1);
         } else {
             if (syno_tar == null)
                 return false;
@@ -90,7 +89,7 @@ public class PlagiarismDetection<E extends Comparable<E>> {
                 // translate the synonyms to their deputy.
                 for (int src : syno_src) {
                     for (int tar : syno_tar) {
-                        if (src == tar && detection(source, target, idx + 1, N - 1))
+                        if (src == tar && detection(source, target, sidx + 1, tidx + 1, N - 1))
                             return true;
                     }
                 }
@@ -100,10 +99,59 @@ public class PlagiarismDetection<E extends Comparable<E>> {
         return false;
     }
 
+    public double detection(Indexable<E> source, Indexable<E> target) {
+        int len = target.size() - this.N;
+        double base = (len);
+
+        int plagiarism = 0;
+        // traverse on the target file.
+        List<Integer> posInSrc;
+        for (int i = 0; i <= len; i++) {
+            E targtWord = target.get(i);
+            List<Integer> synoLst = synos.get(targtWord);
+            if (synoLst == null) {
+                // no synonyms for current word in target
+                posInSrc = fastAccess.get(targtWord);
+                // System.out.println(i + " : " + targtWord + " : " + posInSrc);
+                if (posInSrc != null) {
+                    for (int k : posInSrc) {
+                        if (detection(source, target, k, i, N)) {
+                            System.out.println(i);
+                            plagiarism++;
+                            break;
+                        }
+                    }
+                }
+            } else {
+                boolean isPlag = false;
+                for (int j : synoLst) {
+                    // for all its synonyms, including itself
+                    for (E e : isynos.get(j)) {
+                        // find the starting idx of this synonyms
+                        posInSrc = fastAccess.get(e);
+                        if (posInSrc == null) continue;
+                        for (int k : posInSrc) {
+                            isPlag = detection(source, target, k, i, N);
+                            if (isPlag) {
+                                System.out.println(i);
+                                plagiarism++;
+                                break;
+                            }
+                        }
+                        if (isPlag) break;
+                    }
+                    if (isPlag) break;
+                }
+            }
+        }
+
+        return plagiarism / base;
+    }
+
     private Map<E, List<Integer>> fastAccess(@NotNull Indexable<E> in) {
         Map<E, List<Integer>> fa = new HashMap<>();
 
-        for (int i = 0, len = in.size() - N; i < len; i++) {
+        for (int i = 0, len = in.size() - N; i <= len; i++) {
             E e = in.get(i);
             List<Integer> lst = fa.get(e);
             if (lst == null) {
@@ -111,6 +159,7 @@ public class PlagiarismDetection<E extends Comparable<E>> {
                 fa.put(e, lst);
             }
             lst.add(i);
+            // System.out.println("fastAccess " + e + " : " + lst);
         }
 
         return fa;
