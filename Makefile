@@ -15,7 +15,7 @@ run:
 	java Client synonyms.txt source.txt target.txt 3
 
 test:
-	java Test
+	java -ea Test
 
 clean:
 	$(RM) $(CLASS)
