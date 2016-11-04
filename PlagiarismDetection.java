@@ -22,11 +22,11 @@ public class PlagiarismDetection<E extends Comparable<E>> {
 
     private PlagiarismDetection() {}
 
-    PlagiarismDetection(Synonymsor<E, Integer> synonyms, Indexable<E> source, Indexable<E> target) {
+    public PlagiarismDetection(Synonymsor<E, Integer> synonyms, Indexable<E> source, Indexable<E> target) {
         this(synonyms, source, target, 3);
     }
 
-    PlagiarismDetection(Synonymsor<E, Integer> synonyms, Indexable<E> source, Indexable<E> target, int N) {
+    public PlagiarismDetection(Synonymsor<E, Integer> synonyms, Indexable<E> source, Indexable<E> target, int N) {
         if (N <= 0) {
             throw new IllegalArgumentException("N should be positive");
         }
@@ -121,7 +121,7 @@ public class PlagiarismDetection<E extends Comparable<E>> {
      * e.g.1
      * source: A B C D, target A, synonym A C
      * When encounter A, check all its synonyms A C, then start detection from index 0 and 2
-     * 
+     *
      * @param source
      *      source abstract file implements Indexable interface
      * @param target

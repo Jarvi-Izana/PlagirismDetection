@@ -12,9 +12,9 @@ public final class Test {
     private Test() {}
 
     public static void main(String[] args) {
-        Synonyms syno = new Synonyms("synonyms.txt");
-        Text src = new Text("source.txt");
-        Text tar = new Text("target.txt");
+        Synonyms syno = new Synonyms("test_synonyms.txt");
+        Text src = new Text("test_source.txt");
+        Text tar = new Text("test_target.txt");
         PlagiarismDetection<String> pd = new PlagiarismDetection<>(syno, src, tar);
 
         synonyms_test(syno, pd);
