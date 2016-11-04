@@ -1,9 +1,3 @@
-import com.sun.istack.internal.NotNull;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -217,7 +211,7 @@ public class PlagiarismDetection<E extends Comparable<E>> {
      * @return fa
      *      Map: E -> index in its abstract file model
      */
-    private Map<E, List<Integer>> fastAccess(@NotNull Indexable<E> source) {
+    private Map<E, List<Integer>> fastAccess(Indexable<E> source) {
         Map<E, List<Integer>> fa = new HashMap<>();
 
         // build an map for a word in source to all of its index.

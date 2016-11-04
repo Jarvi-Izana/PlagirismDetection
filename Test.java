@@ -1,5 +1,3 @@
-import com.sun.istack.internal.NotNull;
-
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +24,8 @@ public final class Test {
         detection_test(pd, src, tar);
     }
 
-    private static void synonyms_test(@NotNull Synonyms in, @NotNull PlagiarismDetection<String> pd) {
+    private static void synonyms_test(Synonyms in, PlagiarismDetection<String> pd) {
+        System.out.println("test case on synonyms:");
         Map<String, List<Integer>> syno = pd.getSynonyms(in);
 
         assert syno != null;
@@ -51,7 +50,8 @@ public final class Test {
         }
     }
 
-    private static void text_test(@NotNull Text txt) {
+    private static void text_test(Text txt) {
+        System.out.println("test case for Text model:");
         assert txt.get(2).equals("a");
 
         for (String w : txt) {
@@ -59,7 +59,8 @@ public final class Test {
         }
     }
 
-    private static void detection_test(@NotNull PlagiarismDetection<String> pd, Indexable<String> source, Indexable<String> target) {
+    private static void detection_test(PlagiarismDetection<String> pd, Indexable<String> source, Indexable<String> target) {
+        System.out.println("test on the plagiarism algorithm:");
         System.out.println(pd.detection(source, target, true));
     }
 }
