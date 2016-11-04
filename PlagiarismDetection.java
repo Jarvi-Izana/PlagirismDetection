@@ -1,3 +1,5 @@
+import com.sun.istack.internal.NotNull;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -9,11 +11,11 @@ import java.util.*;
  * home assignment by TripAdvisor
  * DFS of the level.
  */
-public class PlagiarismDetection<T> {
+public class PlagiarismDetection<E extends Comparable<E>> {
     private int N;
     private HashSet<String> src;
-    private Map<String, List<Integer>> synos;
-    private HashMap<Integer, Set<String>> reverseSynos;
+    private Map<E, List<Integer>> synos;
+    private Map<E, List<Integer>> fastAccess;
 
     List<String[]> sourceByN;
 
@@ -37,34 +39,28 @@ public class PlagiarismDetection<T> {
 //
 //    }
 
-    PlagiarismDetection() {
-        this("synonyms.txt", "source.txt", "target.txt");
-    }
+    private PlagiarismDetection() {}
 
-    PlagiarismDetection(String synonyms, String source, String target) {
+    PlagiarismDetection(Synonymsor<E, Integer> synonyms, Indexable<E> source, Indexable<E> target) {
         this(synonyms, source, target, 3);
     }
 
-    PlagiarismDetection(String synonyms, String source, String target, int N) {
+    PlagiarismDetection(Synonymsor<E, Integer> synonyms, Indexable<E> source, Indexable<E> target, int N) {
         if (N <= 0) {
             throw new IllegalArgumentException("N should be positive");
         }
+
+        if (N > source.size() || N > target.size())
+            throw new IllegalArgumentException("Input size less than N");
+
         this.N = N;
-        synos  = getSynonyms(new Synonyms(synonyms));
+        synos  = getSynonyms(synonyms);
+        fastAccess = fastAccess(source);
     }
 
 
-
-    public Map<String, List<Integer>> getSynonyms(Synonyms syno) {
+    public Map<E, List<Integer>> getSynonyms(Synonymsor<E, Integer> syno) {
         return syno.getSynonyms();
-    }
-
-    private String[] buildSourceByN(String source) {
-        return null;
-    }
-
-    private String[] buildTarget(String target) {
-        return null;
     }
 
     /**
@@ -99,5 +95,21 @@ public class PlagiarismDetection<T> {
         }
 
         return false;
+    }
+
+    private Map<E, List<Integer>> fastAccess(@NotNull Indexable<E> in) {
+        Map<E, List<Integer>> fa = new HashMap<>();
+
+        for (int i = 0, len = in.size() - N; i < len; i++) {
+            E e = in.get(i);
+            List<Integer> lst = fa.get(e);
+            if (lst == null) {
+                lst = new ArrayList<>();
+                fa.put(e, lst);
+            }
+            lst.add(i);
+        }
+
+        return fa;
     }
 }

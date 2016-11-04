@@ -9,38 +9,45 @@ import java.util.Map;
 
 /**
  * Created by GuihaoLiang on 11/3/16.
+ * object that provides synonyms
+ * (obj1, obj2, ... ) -> Unique Id
  */
 public class Synonyms implements Synonymsor<String, Integer>  {
-    private String syn;
+    private String synName;
+    private Map<String, List<Integer>> synonyms;
 
-    Synonyms() {
+    public Synonyms() {
         this("synonyms.txt");
     }
 
-    public String getSyn() {
-        return syn;
+    public Synonyms(String synName) {
+        this.synName = synName;
+        buildSynonyms();
     }
 
-    public void setSyn(String syn) {
-        this.syn = syn;
+    public String getSynName() {
+        return synName;
     }
 
-    public Synonyms(String syn) {
-        this.syn = syn;
+    public void setSynName(String synName) {
+        this.synName = synName;
     }
 
     public Map<String, List<Integer>> getSynonyms() {
-        if (syn == null || syn.length() == 0) {
+        return synonyms;
+    }
+
+    public void buildSynonyms() {
+        if (synName == null || synName.length() == 0) {
             System.err.println("Synonyms Input Error");
             throw new IllegalArgumentException("Invalid Synonyms Input");
         }
         // union find like structure.
         HashMap<String, List<Integer>> syno = new HashMap<>();
         try {
-            BufferedReader synof = new BufferedReader(new FileReader(syn));
-            // fist line is always comment. So omit the fist line.
-            String line;
+            BufferedReader synof = new BufferedReader(new FileReader(synName));
             int uniqueId = 0;
+            String line;
             while ((line = synof.readLine()) != null) {
                 String[] wd = line.split("\\s");
                 // find a deputy for this group
@@ -61,6 +68,12 @@ public class Synonyms implements Synonymsor<String, Integer>  {
             System.err.println("synonyms file IO exception");
             System.exit(2);
         }
-        return syno;
+        synonyms = syno;
+    }
+
+    public Map<String, List<Integer>> resetSynonyms(String newFileName) {
+        setSynName(newFileName);
+        buildSynonyms();
+        return getSynonyms();
     }
 }

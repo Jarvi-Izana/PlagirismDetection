@@ -13,25 +13,25 @@ public class Text implements Indexable<String>, Iterable<String> {
     private List<String> words = new ArrayList<>();
 
     Text() {
-        this("synonyms.txt");
+        this("source.txt");
     }
 
     Text(String fileName) {
         cacheFile(fileName);
     }
 
-    private void cacheFile(String syn) {
+    private void cacheFile(String fileName) {
         try {
-            BufferedReader file = new BufferedReader(new FileReader(syn));
+            BufferedReader file = new BufferedReader(new FileReader(fileName));
             String line;
             while ((line = file.readLine()) != null) {
                 words.addAll(Arrays.asList(line.split("\\s")));
             }
         } catch (FileNotFoundException e) {
-            System.err.println("synonyms file not found");
+            System.err.println(fileName + " file not found");
             System.exit(2);
         } catch (IOException io) {
-            System.err.println("synonyms file IO exception");
+            System.err.println(fileName + "file IO exception");
             System.exit(2);
         }
     }
