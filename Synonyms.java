@@ -6,8 +6,9 @@ import java.util.*;
 
 /**
  * Created by GuihaoLiang on 11/3/16.
- * object that provides synonyms
+ * Provides synonyms based on string, backed by file.
  * (obj1, obj2, ... ) -> Unique Id
+ * Unique Id -> obj1, obj3, ...
  */
 public class Synonyms implements Synonymsor<String, Integer> {
     private String synName;
@@ -44,20 +45,25 @@ public class Synonyms implements Synonymsor<String, Integer> {
             System.err.println("Synonyms Input Error");
             throw new IllegalArgumentException("Invalid Synonyms Input");
         }
-        // union find like structure.
+        // union-find-like structure.
         HashMap<String, List<Integer>> syno = new HashMap<>();
         HashMap<Integer, List<String>> isyno = new HashMap<>();
+
         try {
             BufferedReader synof = new BufferedReader(new FileReader(synName));
             int uniqueId = 0;
             String line;
             while ((line = synof.readLine()) != null) {
+                // a series of string
                 String[] wd = line.split("\\s");
+                // if the wd array is empty, just skip
                 if (wd.length != 0) {
                     List<String> wl = new ArrayList<>();
+                    // unique id -> words in this group
                     isyno.put(uniqueId, wl);
                     for (String w : wd) {
                         wl.add(w);
+                        // words -> unique id
                         List<Integer> lst = syno.get(w);
                         if (lst == null) {
                             lst = new ArrayList<>();
