@@ -1,4 +1,5 @@
 *.class
+*.pdf
 .project
 .classpath
 .idea
