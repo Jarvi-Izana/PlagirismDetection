@@ -26,7 +26,7 @@ Use the **Client** class to accept customized input
 
 # Assumptions
 ## file size
-The abstract file (explained later) is reletively and can be loaded in to memory.
+The abstract file (explained later) is reletively small and can be loaded into memory.
 
 ## synonyms input
 I assume one line is for one synonyms group.
