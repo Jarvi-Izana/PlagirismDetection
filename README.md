@@ -25,6 +25,9 @@ Use the **Client** class to accept customized input
         Used to run PlagiarismDetection instance.
 
 # Assumptions
+## file size
+The abstract file (explained later) is reletively and can be loaded in to memory.
+
 ## synonyms input
 I assume one line is for one synonyms group.
 If multiple lines are exactly same, I treat them different because they may have different semantics based on different context.
